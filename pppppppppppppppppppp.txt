@@ -1,0 +1,126 @@
+Codeshare logo
+ ShareSign UpLog In
+Disconnected. Click here to refresh.
+43
+        self.result_label.pack()
+44
+​
+45
+    def insert(self):
+46
+        id_value = self.entry.get()
+47
+        if id_value:
+48
+            try:
+49
+                self.cursor.execute("INSERT INTO ids (id) VALUES (%s)", (id_value,))
+50
+                self.conn.commit()
+51
+                self.result_label.config(text=f"Inserted ID: {id_value}")
+52
+            except mysql.connector.IntegrityError:
+53
+                messagebox.showwarning("Warning", "ID already exists!")
+54
+            except Exception as e:
+55
+                messagebox.showerror("Error", str(e))
+56
+        else:
+57
+            messagebox.showwarning("Warning", "Please enter an ID.")
+58
+​
+59
+    def update(self):
+60
+        id_value = self.entry.get()
+61
+        if id_value:
+62
+            new_value = id_value  # You can modify this to take a new value from another entry if needed
+63
+            try:
+64
+                self.cursor.execute("UPDATE ids SET id = %s WHERE id = %s", (new_value, id_value))
+65
+                if self.cursor.rowcount > 0:
+66
+                    self.conn.commit()
+67
+                    self.result_label.config(text=f"Updated ID: {id_value}")
+68
+                else:
+69
+                    messagebox.showwarning("Warning", "ID not found!")
+70
+            except Exception as e:
+71
+                messagebox.showerror("Error", str(e))
+72
+        else:
+73
+            messagebox.showwarning("Warning", "Please enter an ID.")
+74
+​
+75
+    def delete(self):
+76
+        id_value = self.entry.get()
+77
+        if id_value:
+78
+            try:
+79
+                self.cursor.execute("DELETE FROM ids WHERE id = %s", (id_value,))
+80
+                if self.cursor.rowcount > 0:
+81
+                    self.conn.commit()
+82
+                    self.result_label.config(text=f"Deleted ID: {id_value}")
+83
+                else:
+84
+                    messagebox.showwarning("Warning", "ID not found!")
+85
+            except Exception as e:
+86
+                messagebox.showerror("Error", str(e))
+87
+        else:
+88
+            messagebox.showwarning("Warning", "Please enter an ID.")
+89
+​
+90
+    def on_closing(self):
+91
+        self.cursor.close()
+92
+        self.conn.close()
+93
+        self.root.destroy()
+94
+​
+95
+if __name__ == "__main__":
+96
+    root = tk.Tk()
+97
+    app = SimpleApp(root)
+98
+    root.protocol("WM_DELETE_WINDOW", app.on_closing)
+99
+    root.mainloop()
+100
+​
+
+
+
+
+
+px
+Hide Ads
